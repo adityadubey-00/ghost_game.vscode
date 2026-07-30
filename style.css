@@ -135,14 +135,16 @@ body {
 }
 
 .diff-container {
-    display: flex;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     margin-bottom: 25px;
+    width: 85%;
 }
 
 .diff-btn {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 10px 5px;
+    font-size: 12px;
     font-weight: bold;
     background: #220033;
     color: #aaa;
