@@ -19,10 +19,10 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// MEDIUM GAP (220px - Na zyada bada, na zyada chhota)
+// GAP EXACT 200px KAR DIYA HAI
 let currentSpeed = 1.8;
-let currentGap = 220; 
-let spawnDelay = 2600;
+let currentGap = 200; 
+let spawnDelay = 2500;
 
 // Sound Effects
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -64,13 +64,13 @@ function selectDiff(btn) {
     currentSpeed = parseFloat(btn.dataset.speed);
     
     if (currentSpeed === 1.8) {
-        currentGap = 220; // Medium Gap
-        spawnDelay = 2600;
+        currentGap = 200; // Perfect 200px Gap
+        spawnDelay = 2500;
     } else if (currentSpeed === 2.8) {
-        currentGap = 200;
-        spawnDelay = 2200;
+        currentGap = 180;
+        spawnDelay = 2100;
     } else {
-        currentGap = 185;
+        currentGap = 165;
         spawnDelay = 1600;
     }
 }
