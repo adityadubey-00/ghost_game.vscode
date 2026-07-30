@@ -1,169 +1,205 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
+const board = document.getElementById('game-board');
+const ghost = document.getElementById('ghost');
+const scoreDisplay = document.getElementById('score');
+const highScoreDisplay = document.getElementById('high-score');
+const welcomeScreen = document.getElementById('welcome-screen');
+const menuScreen = document.getElementById('menu-screen');
+const gameOverScreen = document.getElementById('game-over-screen');
+const finalScore = document.getElementById('final-score');
+const bestScoreDisplay = document.getElementById('best-score-display');
+
+let ghostY = 250;
+let gravity = 0.30; 
+let velocity = 0;
+let isGameOver = true;
+let score = 0;
+let highScore = localStorage.getItem('ghostHighScore') || 0;
+highScoreDisplay.innerText = "Best: " + highScore;
+
+let gameInterval;
+let treeTimeout;
+
+// DEFAULT: Normal / Chill Mode (160px Gap)
+let currentSpeed = 1.8;
+let currentGap = 160; 
+let spawnDelay = 2500;
+
+// Sound Effects
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'jump') {
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+    } else if (type === 'hit') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+    }
 }
 
-body {
-    background-color: #0d0d1a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
+function enterGame() {
+    welcomeScreen.style.display = 'none';
+    menuScreen.style.display = 'flex';
 }
 
-#game-board {
-    width: 360px;
-    height: 640px;
-    background: linear-gradient(to bottom, #110022, #220033, #330044);
-    position: relative;
-    overflow: hidden;
-    border: 4px solid #8800cc;
-    box-shadow: 0 0 25px rgba(136, 0, 204, 0.5);
-    border-radius: 12px;
+function selectDiff(btn) {
+    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    currentSpeed = parseFloat(btn.dataset.speed);
+    
+    // Gaps configured as per requirement
+    if (currentSpeed === 1.8) {
+        currentGap = 160; // Normal Gap (160px)
+        spawnDelay = 2500;
+    } else if (currentSpeed === 2.8) {
+        currentGap = 140; // Medium Gap (140px)
+        spawnDelay = 2100;
+    } else if (currentSpeed === 3.8) {
+        currentGap = 120; // PRO MODE (120px)
+        spawnDelay = 1600;
+    }
 }
 
-/* Character */
-#ghost {
-    width: 40px;
-    height: 40px;
-    background-color: #ffffff;
-    border-radius: 50% 50% 10% 10%;
-    position: absolute;
-    left: 60px;
-    top: 250px;
-    box-shadow: 0 0 15px #ffffff, 0 0 30px #bb00ff;
-    z-index: 5;
+function jump() {
+    if (!isGameOver) {
+        velocity = -5.8;
+        playSound('jump');
+    }
 }
 
-/* Ghost Eyes */
-#ghost::before, #ghost::after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    width: 6px;
-    height: 8px;
-    background-color: #000;
-    border-radius: 50%;
-}
-#ghost::before { left: 10px; }
-#ghost::after { right: 10px; }
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') jump();
+});
+board.addEventListener('mousedown', (e) => {
+    if (e.target.tagName !== 'BUTTON') jump();
+});
 
-/* Trees / Obstacles */
-.tree {
-    position: absolute;
-    width: 60px;
-    background: linear-gradient(to right, #004d00, #008000, #003300);
-    border: 2px solid #00ff66;
-    box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
-    z-index: 2;
-}
-
-.top-tree {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-.bottom-tree {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+function startGame() {
+    document.querySelectorAll('.tree').forEach(tree => tree.remove());
+    
+    ghostY = 250;
+    velocity = 0;
+    score = 0;
+    isGameOver = false;
+    
+    scoreDisplay.innerText = 'Score: 0';
+    welcomeScreen.style.display = 'none';
+    menuScreen.style.display = 'none';
+    gameOverScreen.style.display = 'none';
+    
+    clearTimeout(treeTimeout);
+    clearInterval(gameInterval);
+    
+    gameInterval = setInterval(updateGame, 20);
+    spawnTree();
 }
 
-/* Scores */
-#score, #high-score {
-    position: absolute;
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 10;
-    text-shadow: 0 0 5px #000;
-}
-#score { top: 15px; left: 15px; }
-#high-score { top: 15px; right: 15px; color: #ffcc00; }
+function updateGame() {
+    velocity += gravity;
+    ghostY += velocity;
+    ghost.style.top = ghostY + 'px';
 
-/* Overlays / Screens */
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 0, 20, 0.85);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
+    if (ghostY > 590 || ghostY < 0) {
+        endGame();
+    }
 
-.overlay h1 {
-    font-size: 32px;
-    color: #cc33ff;
-    text-shadow: 0 0 10px #cc33ff;
-    margin-bottom: 10px;
+    const trees = document.querySelectorAll('.tree');
+    trees.forEach(tree => {
+        let treeLeft = parseFloat(tree.style.left);
+        treeLeft -= currentSpeed;
+        tree.style.left = treeLeft + 'px';
+
+        if (isColliding(ghost, tree)) {
+            endGame();
+        }
+
+        if (tree.dataset.passed !== 'true' && treeLeft < 30) {
+            if (tree.classList.contains('bottom-tree')) {
+                score++;
+                scoreDisplay.innerText = 'Score: 0' + score;
+            }
+            tree.dataset.passed = 'true';
+        }
+
+        if (treeLeft < -70) {
+            tree.remove();
+        }
+    });
 }
 
-.overlay p {
-    font-size: 16px;
-    color: #ccc;
-    margin-bottom: 20px;
+function spawnTree() {
+    if (isGameOver) return;
+
+    let randomHeight = Math.floor(Math.random() * 140) + 80;
+
+    const topTree = document.createElement('div');
+    topTree.classList.add('tree', 'top-tree');
+    topTree.style.left = '360px';
+    topTree.style.top = '0px';
+    topTree.style.height = randomHeight + 'px';
+    board.appendChild(topTree);
+
+    const bottomTree = document.createElement('div');
+    bottomTree.classList.add('tree', 'bottom-tree');
+    bottomTree.style.left = '360px';
+    bottomTree.style.bottom = '0px';
+    bottomTree.style.height = (640 - randomHeight - currentGap) + 'px';
+    board.appendChild(bottomTree);
+
+    treeTimeout = setTimeout(spawnTree, spawnDelay);
 }
 
-/* Buttons */
-.btn {
-    padding: 12px 28px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(45deg, #8800cc, #bb00ff);
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(187, 0, 255, 0.6);
-    transition: transform 0.1s, background 0.2s;
-    margin: 5px;
+function isColliding(a, b) {
+    let aRect = a.getBoundingClientRect();
+    let bRect = b.getBoundingClientRect();
+
+    let padding = 8;
+
+    return !(
+        aRect.top + padding > bRect.bottom ||
+        aRect.bottom - padding < bRect.top ||
+        aRect.right - padding < bRect.left ||
+        aRect.left + padding > bRect.right
+    );
 }
 
-.btn:active {
-    transform: scale(0.95);
+function endGame() {
+    if (isGameOver) return;
+    isGameOver = true;
+    playSound('hit');
+    
+    clearInterval(gameInterval);
+    clearTimeout(treeTimeout);
+    
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('ghostHighScore', highScore);
+        highScoreDisplay.innerText = "Best: " + highScore;
+    }
+
+    finalScore.innerText = "Current Score: " + score;
+    bestScoreDisplay.innerText = "High Score: " + highScore;
+    gameOverScreen.style.display = 'flex';
 }
 
-.diff-container {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 25px;
-}
-
-.diff-btn {
-    padding: 8px 12px;
-    font-size: 13px;
-    font-weight: bold;
-    background: #220033;
-    color: #aaa;
-    border: 2px solid #550088;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.diff-btn.active {
-    background: #8800cc;
-    color: #fff;
-    border-color: #00ff66;
-    box-shadow: 0 0 8px #00ff66;
-}
-
-.btn-group {
-    display: flex;
-    gap: 10px;
-}
-
-.menu-btn-style {
-    background: linear-gradient(45deg, #444, #666);
-    box-shadow: none;
+function showMenu() {
+    gameOverScreen.style.display = 'none';
+    welcomeScreen.style.display = 'none';
+    menuScreen.style.display = 'flex';
 }
