@@ -19,9 +19,9 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// GAP EXACT 150px KAR DIYA HAI
+// GAP EXACT 100px KAR DIYA HAI (PRO LEVEL)
 let currentSpeed = 1.8;
-let currentGap = 150; 
+let currentGap = 100; 
 let spawnDelay = 2500;
 
 // Sound Effects
@@ -64,13 +64,13 @@ function selectDiff(btn) {
     currentSpeed = parseFloat(btn.dataset.speed);
     
     if (currentSpeed === 1.8) {
-        currentGap = 150; // Exact 150px Gap
+        currentGap = 100; // Exact 100px Gap
         spawnDelay = 2500;
     } else if (currentSpeed === 2.8) {
-        currentGap = 135;
+        currentGap = 90;
         spawnDelay = 2100;
     } else {
-        currentGap = 120;
+        currentGap = 80;
         spawnDelay = 1600;
     }
 }
