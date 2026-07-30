@@ -9,7 +9,7 @@ const finalScore = document.getElementById('final-score');
 const bestScoreDisplay = document.getElementById('best-score-display');
 
 let ghostY = 250;
-let gravity = 0.35;
+let gravity = 0.30; // Jump ekdum smooth
 let velocity = 0;
 let isGameOver = true;
 let score = 0;
@@ -19,11 +19,12 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
+// EXTRA BADA GAP (250px - Ab Bhoot bina takraye easily niklega)
 let currentSpeed = 1.8;
-let currentGap = 180;
-let spawnDelay = 2600;
+let currentGap = 250; 
+let spawnDelay = 2900;
 
-// Web Audio API for Built-in Sound Effects (No MP3 required!)
+// Sound Effects
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -61,16 +62,22 @@ function selectDiff(btn) {
     btn.classList.add('active');
     
     currentSpeed = parseFloat(btn.dataset.speed);
-    currentGap = parseInt(btn.dataset.gap);
     
-    if (currentSpeed === 1.8) spawnDelay = 2600;
-    else if (currentSpeed === 2.8) spawnDelay = 2000;
-    else spawnDelay = 1400;
+    if (currentSpeed === 1.8) {
+        currentGap = 250; // Super Easy Gap
+        spawnDelay = 2900;
+    } else if (currentSpeed === 2.8) {
+        currentGap = 230;
+        spawnDelay = 2200;
+    } else {
+        currentGap = 210;
+        spawnDelay = 1600;
+    }
 }
 
 function jump() {
     if (!isGameOver) {
-        velocity = -6.5;
+        velocity = -5.8;
         playSound('jump');
     }
 }
@@ -138,7 +145,7 @@ function updateGame() {
 function spawnTree() {
     if (isGameOver) return;
 
-    let randomHeight = Math.floor(Math.random() * 200) + 80;
+    let randomHeight = Math.floor(Math.random() * 140) + 80;
 
     const topTree = document.createElement('div');
     topTree.classList.add('tree', 'top-tree');
@@ -161,11 +168,14 @@ function isColliding(a, b) {
     let aRect = a.getBoundingClientRect();
     let bRect = b.getBoundingClientRect();
 
+    // Hitbox Safety Guard
+    let padding = 8;
+
     return !(
-        aRect.top > bRect.bottom ||
-        aRect.bottom < bRect.top ||
-        aRect.right < bRect.left ||
-        aRect.left > bRect.right
+        aRect.top + padding > bRect.bottom ||
+        aRect.bottom - padding < bRect.top ||
+        aRect.right - padding < bRect.left ||
+        aRect.left + padding > bRect.right
     );
 }
 
