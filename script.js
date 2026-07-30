@@ -9,7 +9,7 @@ const finalScore = document.getElementById('final-score');
 const bestScoreDisplay = document.getElementById('best-score-display');
 
 let ghostY = 250;
-let gravity = 0.30; // Jump ekdum smooth
+let gravity = 0.30; 
 let velocity = 0;
 let isGameOver = true;
 let score = 0;
@@ -19,10 +19,10 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// EXTRA BADA GAP (250px - Ab Bhoot bina takraye easily niklega)
+// MEDIUM GAP (220px - Na zyada bada, na zyada chhota)
 let currentSpeed = 1.8;
-let currentGap = 250; 
-let spawnDelay = 2900;
+let currentGap = 220; 
+let spawnDelay = 2600;
 
 // Sound Effects
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -64,13 +64,13 @@ function selectDiff(btn) {
     currentSpeed = parseFloat(btn.dataset.speed);
     
     if (currentSpeed === 1.8) {
-        currentGap = 250; // Super Easy Gap
-        spawnDelay = 2900;
+        currentGap = 220; // Medium Gap
+        spawnDelay = 2600;
     } else if (currentSpeed === 2.8) {
-        currentGap = 230;
+        currentGap = 200;
         spawnDelay = 2200;
     } else {
-        currentGap = 210;
+        currentGap = 185;
         spawnDelay = 1600;
     }
 }
@@ -168,7 +168,6 @@ function isColliding(a, b) {
     let aRect = a.getBoundingClientRect();
     let bRect = b.getBoundingClientRect();
 
-    // Hitbox Safety Guard
     let padding = 8;
 
     return !(
