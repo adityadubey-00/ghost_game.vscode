@@ -19,9 +19,9 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// GAP EXACT 200px KAR DIYA HAI
+// GAP EXACT 150px KAR DIYA HAI
 let currentSpeed = 1.8;
-let currentGap = 200; 
+let currentGap = 150; 
 let spawnDelay = 2500;
 
 // Sound Effects
@@ -64,13 +64,13 @@ function selectDiff(btn) {
     currentSpeed = parseFloat(btn.dataset.speed);
     
     if (currentSpeed === 1.8) {
-        currentGap = 200; // Perfect 200px Gap
+        currentGap = 150; // Exact 150px Gap
         spawnDelay = 2500;
     } else if (currentSpeed === 2.8) {
-        currentGap = 180;
+        currentGap = 135;
         spawnDelay = 2100;
     } else {
-        currentGap = 165;
+        currentGap = 120;
         spawnDelay = 1600;
     }
 }
