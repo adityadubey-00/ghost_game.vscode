@@ -19,9 +19,9 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// GAP EXACT 100px KAR DIYA HAI (PRO LEVEL)
+// DEFAULT GAP: 130px
 let currentSpeed = 1.8;
-let currentGap = 100; 
+let currentGap = 130; 
 let spawnDelay = 2500;
 
 // Sound Effects
@@ -63,14 +63,15 @@ function selectDiff(btn) {
     
     currentSpeed = parseFloat(btn.dataset.speed);
     
+    // Difficulty Selection
     if (currentSpeed === 1.8) {
-        currentGap = 100; // Exact 100px Gap
+        currentGap = 130; // Easy / Normal Mode (130px)
         spawnDelay = 2500;
     } else if (currentSpeed === 2.8) {
-        currentGap = 90;
+        currentGap = 115; // Medium Mode
         spawnDelay = 2100;
-    } else {
-        currentGap = 80;
+    } else if (currentSpeed === 3.8) {
+        currentGap = 100; // PRO MODE (100px)
         spawnDelay = 1600;
     }
 }
