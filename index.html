@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Nightmare - Flappy Run</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-board">
+        <!-- Spooky Atmosphere -->
+        <div class="blood-moon"></div>
+        <div class="fog"></div>
+        <div class="spooky-trees-bg"></div>
+
+        <!-- Animated Neon Ghost -->
+        <div id="ghost">
+            <div class="ghost-eye left"></div>
+            <div class="ghost-eye right"></div>
+            <div class="ghost-mouth"></div>
+        </div>
+
+        <!-- Scores -->
+        <div id="score">Score: 0</div>
+        <div id="high-score">Best: 0</div>
+
+        <!-- 1. WELCOME SCREEN -->
+        <div id="welcome-screen">
+            <div class="welcome-ghost">👻</div>
+            <h1>GHOST NIGHTMARE</h1>
+            <p>Spooky Woods Me Survive Karein!</p>
+            <button id="enter-btn" onclick="enterGame()">ENTER NIGHTMARE</button>
+        </div>
+
+        <!-- 2. SETTINGS / DIFFICULTY MENU -->
+        <div id="menu-screen" style="display: none;">
+            <h1>⚙️ MODE SELECT</h1>
+            
+            <div class="difficulty-options">
+                <button class="diff-btn active" data-speed="1.8" data-gap="180" onclick="selectDiff(this)">🟢 Chill (Slow)</button>
+                <button class="diff-btn" data-speed="2.8" data-gap="160" onclick="selectDiff(this)">🟡 Spooky (Normal)</button>
+                <button class="diff-btn" data-speed="4.2" data-gap="135" onclick="selectDiff(this)">🔴 Nightmare (Fast)</button>
+            </div>
+
+            <button id="start-btn" onclick="startGame()">START RUN</button>
+        </div>
+
+        <!-- 3. GAME OVER SCREEN -->
+        <div id="game-over-screen" style="display: none;">
+            <h1 id="title-text">☠️ GAME OVER</h1>
+            <p id="final-score">Score: 0</p>
+            <p id="best-score-display">Best Score: 0</p>
+            
+            <div class="btn-group">
+                <button class="menu-btn" onclick="showMenu()">⚙️ Settings</button>
+                <button class="play-again-btn" onclick="startGame()">🔄 Retry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

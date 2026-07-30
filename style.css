@@ -1,0 +1,202 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #05050a;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    user-select: none;
+}
+
+#game-board {
+    width: 360px;
+    height: 640px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #020208, #110926, #05010d);
+    border: 3px solid #ff0055;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(255, 0, 85, 0.4);
+}
+
+/* Blood Moon & Neon Vibe */
+.blood-moon {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background: #ff0055;
+    border-radius: 50%;
+    box-shadow: 0 0 30px #ff0055;
+}
+
+/* Neon Ghost Character */
+#ghost {
+    width: 40px;
+    height: 48px;
+    position: absolute;
+    top: 250px;
+    left: 60px;
+    background: #ffffff;
+    border-radius: 20px 20px 8px 8px;
+    box-shadow: 0 0 20px #ffffff, 0 0 10px #ff0055;
+    z-index: 10;
+}
+
+.ghost-eye {
+    width: 8px;
+    height: 10px;
+    background: #ff0055;
+    border-radius: 50%;
+    position: absolute;
+    top: 12px;
+    box-shadow: 0 0 8px #ff0055;
+}
+.ghost-eye.left { left: 8px; }
+.ghost-eye.right { right: 8px; }
+
+.ghost-mouth {
+    width: 10px;
+    height: 8px;
+    background: #000000;
+    border-radius: 50%;
+    position: absolute;
+    top: 28px;
+    left: 15px;
+}
+
+/* Dark Spooky Dead Trees */
+.tree {
+    position: absolute;
+    width: 50px;
+    background: linear-gradient(to right, #1a0826, #3b1354, #1a0826);
+    border: 2px solid #b537f2;
+    border-radius: 6px;
+    box-shadow: 0 0 12px rgba(181, 55, 242, 0.4);
+    z-index: 5;
+}
+
+.tree::after {
+    content: '💀';
+    position: absolute;
+    font-size: 20px;
+    left: 12px;
+}
+.tree.top-tree::after { bottom: 10px; }
+.tree.bottom-tree::after { top: 10px; }
+
+/* Score UI */
+#score {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: #ff0055;
+    font-size: 26px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff0055;
+    z-index: 15;
+}
+
+#high-score {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #00ffcc;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffcc;
+    z-index: 15;
+}
+
+/* OVERLAY SCREENS */
+#welcome-screen, #menu-screen, #game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 2, 12, 0.92);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 20;
+    text-align: center;
+}
+
+.welcome-ghost {
+    font-size: 75px;
+    animation: hoverAnim 2s infinite ease-in-out;
+}
+
+@keyframes hoverAnim {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-20px) scale(1.1); }
+}
+
+#welcome-screen h1, #menu-screen h1, #game-over-screen h1 {
+    font-size: 32px;
+    margin: 10px 0;
+    color: #ff0055;
+    text-shadow: 0 0 15px #ff0055;
+}
+
+#enter-btn, #start-btn, .play-again-btn {
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #ff0055;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
+    transition: 0.2s;
+}
+
+#enter-btn:hover, #start-btn:hover, .play-again-btn:hover {
+    transform: scale(1.05);
+}
+
+.difficulty-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    width: 75%;
+}
+
+.diff-btn {
+    padding: 12px;
+    background: #110926;
+    color: white;
+    border: 2px solid #3b1354;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.diff-btn.active {
+    border-color: #00ffcc;
+    box-shadow: 0 0 15px #00ffcc;
+    color: #00ffcc;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.menu-btn {
+    padding: 12px 20px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 25px;
+    cursor: pointer;
+}
