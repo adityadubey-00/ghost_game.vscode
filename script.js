@@ -19,7 +19,7 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// DEFAULT: Normal / Chill Mode (160px Gap)
+// DEFAULT: Chill Mode (160px Gap)
 let currentSpeed = 1.8;
 let currentGap = 160; 
 let spawnDelay = 2500;
@@ -63,16 +63,19 @@ function selectDiff(btn) {
     
     currentSpeed = parseFloat(btn.dataset.speed);
     
-    // Gaps configured as per requirement
+    // 4 Difficulty Levels Setup
     if (currentSpeed === 1.8) {
-        currentGap = 160; // Normal Gap (160px)
+        currentGap = 160; // Chill (160px)
         spawnDelay = 2500;
-    } else if (currentSpeed === 2.8) {
-        currentGap = 140; // Medium Gap (140px)
+    } else if (currentSpeed === 2.5) {
+        currentGap = 140; // Spooky (140px)
         spawnDelay = 2100;
+    } else if (currentSpeed === 3.2) {
+        currentGap = 130; // Hard (130px)
+        spawnDelay = 1800;
     } else if (currentSpeed === 3.8) {
         currentGap = 120; // PRO MODE (120px)
-        spawnDelay = 1600;
+        spawnDelay = 1500;
     }
 }
 
@@ -132,7 +135,7 @@ function updateGame() {
         if (tree.dataset.passed !== 'true' && treeLeft < 30) {
             if (tree.classList.contains('bottom-tree')) {
                 score++;
-                scoreDisplay.innerText = 'Score: 0' + score;
+                scoreDisplay.innerText = 'Score: ' + score;
             }
             tree.dataset.passed = 'true';
         }
