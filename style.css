@@ -1,202 +1,169 @@
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+}
+
+body {
+    background-color: #0d0d1a;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #05050a;
-    font-family: 'Trebuchet MS', Arial, sans-serif;
-    user-select: none;
+    overflow: hidden;
 }
 
 #game-board {
     width: 360px;
     height: 640px;
+    background: linear-gradient(to bottom, #110022, #220033, #330044);
     position: relative;
     overflow: hidden;
-    background: linear-gradient(to bottom, #020208, #110926, #05010d);
-    border: 3px solid #ff0055;
-    border-radius: 16px;
-    box-shadow: 0 0 35px rgba(255, 0, 85, 0.4);
+    border: 4px solid #8800cc;
+    box-shadow: 0 0 25px rgba(136, 0, 204, 0.5);
+    border-radius: 12px;
 }
 
-/* Blood Moon & Neon Vibe */
-.blood-moon {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    width: 70px;
-    height: 70px;
-    background: #ff0055;
-    border-radius: 50%;
-    box-shadow: 0 0 30px #ff0055;
-}
-
-/* Neon Ghost Character */
+/* Character */
 #ghost {
     width: 40px;
-    height: 48px;
+    height: 40px;
+    background-color: #ffffff;
+    border-radius: 50% 50% 10% 10%;
     position: absolute;
-    top: 250px;
     left: 60px;
-    background: #ffffff;
-    border-radius: 20px 20px 8px 8px;
-    box-shadow: 0 0 20px #ffffff, 0 0 10px #ff0055;
-    z-index: 10;
-}
-
-.ghost-eye {
-    width: 8px;
-    height: 10px;
-    background: #ff0055;
-    border-radius: 50%;
-    position: absolute;
-    top: 12px;
-    box-shadow: 0 0 8px #ff0055;
-}
-.ghost-eye.left { left: 8px; }
-.ghost-eye.right { right: 8px; }
-
-.ghost-mouth {
-    width: 10px;
-    height: 8px;
-    background: #000000;
-    border-radius: 50%;
-    position: absolute;
-    top: 28px;
-    left: 15px;
-}
-
-/* Dark Spooky Dead Trees */
-.tree {
-    position: absolute;
-    width: 50px;
-    background: linear-gradient(to right, #1a0826, #3b1354, #1a0826);
-    border: 2px solid #b537f2;
-    border-radius: 6px;
-    box-shadow: 0 0 12px rgba(181, 55, 242, 0.4);
+    top: 250px;
+    box-shadow: 0 0 15px #ffffff, 0 0 30px #bb00ff;
     z-index: 5;
 }
 
-.tree::after {
-    content: '💀';
+/* Ghost Eyes */
+#ghost::before, #ghost::after {
+    content: '';
     position: absolute;
-    font-size: 20px;
-    left: 12px;
+    top: 10px;
+    width: 6px;
+    height: 8px;
+    background-color: #000;
+    border-radius: 50%;
 }
-.tree.top-tree::after { bottom: 10px; }
-.tree.bottom-tree::after { top: 10px; }
+#ghost::before { left: 10px; }
+#ghost::after { right: 10px; }
 
-/* Score UI */
-#score {
+/* Trees / Obstacles */
+.tree {
     position: absolute;
-    top: 15px;
-    left: 20px;
-    color: #ff0055;
-    font-size: 26px;
-    font-weight: bold;
-    text-shadow: 0 0 10px #ff0055;
-    z-index: 15;
+    width: 60px;
+    background: linear-gradient(to right, #004d00, #008000, #003300);
+    border: 2px solid #00ff66;
+    box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+    z-index: 2;
 }
 
-#high-score {
+.top-tree {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.bottom-tree {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Scores */
+#score, #high-score {
     position: absolute;
-    top: 15px;
-    right: 20px;
-    color: #00ffcc;
+    color: #fff;
     font-size: 18px;
     font-weight: bold;
-    text-shadow: 0 0 10px #00ffcc;
-    z-index: 15;
+    z-index: 10;
+    text-shadow: 0 0 5px #000;
 }
+#score { top: 15px; left: 15px; }
+#high-score { top: 15px; right: 15px; color: #ffcc00; }
 
-/* OVERLAY SCREENS */
-#welcome-screen, #menu-screen, #game-over-screen {
+/* Overlays / Screens */
+.overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(5, 2, 12, 0.92);
+    background: rgba(10, 0, 20, 0.85);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: white;
     z-index: 20;
+    color: white;
     text-align: center;
+    padding: 20px;
 }
 
-.welcome-ghost {
-    font-size: 75px;
-    animation: hoverAnim 2s infinite ease-in-out;
-}
-
-@keyframes hoverAnim {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-20px) scale(1.1); }
-}
-
-#welcome-screen h1, #menu-screen h1, #game-over-screen h1 {
+.overlay h1 {
     font-size: 32px;
-    margin: 10px 0;
-    color: #ff0055;
-    text-shadow: 0 0 15px #ff0055;
+    color: #cc33ff;
+    text-shadow: 0 0 10px #cc33ff;
+    margin-bottom: 10px;
 }
 
-#enter-btn, #start-btn, .play-again-btn {
-    padding: 14px 32px;
+.overlay p {
     font-size: 16px;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 28px;
+    font-size: 18px;
     font-weight: bold;
-    background: #ff0055;
     color: #fff;
+    background: linear-gradient(45deg, #8800cc, #bb00ff);
     border: none;
-    border-radius: 30px;
+    border-radius: 25px;
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
-    transition: 0.2s;
+    box-shadow: 0 0 15px rgba(187, 0, 255, 0.6);
+    transition: transform 0.1s, background 0.2s;
+    margin: 5px;
 }
 
-#enter-btn:hover, #start-btn:hover, .play-again-btn:hover {
-    transform: scale(1.05);
+.btn:active {
+    transform: scale(0.95);
 }
 
-.difficulty-options {
+.diff-container {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin: 20px 0;
-    width: 75%;
+    gap: 8px;
+    margin-bottom: 25px;
 }
 
 .diff-btn {
-    padding: 12px;
-    background: #110926;
-    color: white;
-    border: 2px solid #3b1354;
-    border-radius: 10px;
-    cursor: pointer;
+    padding: 8px 12px;
+    font-size: 13px;
     font-weight: bold;
+    background: #220033;
+    color: #aaa;
+    border: 2px solid #550088;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .diff-btn.active {
-    border-color: #00ffcc;
-    box-shadow: 0 0 15px #00ffcc;
-    color: #00ffcc;
+    background: #8800cc;
+    color: #fff;
+    border-color: #00ff66;
+    box-shadow: 0 0 8px #00ff66;
 }
 
 .btn-group {
     display: flex;
     gap: 10px;
-    margin-top: 15px;
 }
 
-.menu-btn {
-    padding: 12px 20px;
-    background: #222;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 25px;
-    cursor: pointer;
+.menu-btn-style {
+    background: linear-gradient(45deg, #444, #666);
+    box-shadow: none;
 }
