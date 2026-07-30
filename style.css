@@ -26,31 +26,33 @@ body {
     border-radius: 12px;
 }
 
-/* Character */
+/* NEW NEW LOOK FOR GHOST (Neon Glowing Purple Ghost) */
 #ghost {
-    width: 40px;
-    height: 40px;
-    background-color: #ffffff;
-    border-radius: 50% 50% 10% 10%;
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #ff007f, #7928ca);
+    border-radius: 50% 50% 20% 20%;
     position: absolute;
     left: 60px;
     top: 250px;
-    box-shadow: 0 0 15px #ffffff, 0 0 30px #bb00ff;
+    box-shadow: 0 0 20px #ff007f, 0 0 35px #7928ca;
     z-index: 5;
+    transition: transform 0.1s;
 }
 
-/* Ghost Eyes */
+/* Glowing Red Eyes */
 #ghost::before, #ghost::after {
     content: '';
     position: absolute;
-    top: 10px;
-    width: 6px;
-    height: 8px;
-    background-color: #000;
+    top: 12px;
+    width: 7px;
+    height: 9px;
+    background-color: #00ffff;
     border-radius: 50%;
+    box-shadow: 0 0 5px #00ffff;
 }
-#ghost::before { left: 10px; }
-#ghost::after { right: 10px; }
+#ghost::before { left: 9px; }
+#ghost::after { right: 9px; }
 
 /* Trees / Obstacles */
 .tree {
