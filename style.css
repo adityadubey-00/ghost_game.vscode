@@ -26,6 +26,7 @@ body {
     border-radius: 16px;
 }
 
+/* GHOST CHARACTER */
 #ghost {
     width: 45px;
     height: 45px;
@@ -59,19 +60,65 @@ body {
 #ghost.skin-star::before { content: '⭐'; }
 #ghost.skin-snake::before { content: '🐍'; }
 
-/* FLOATING EMOJI OBSTACLES */
-.obstacle {
+/* FULL PILLARS STYLING */
+.pipe {
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: 70px;
     z-index: 5;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
-    font-size: 50px;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    font-size: 24px;
+    overflow: hidden;
 }
 
+.pipe.top-pipe {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.pipe.bottom-pipe {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* 5 PILLAR TYPES (THEMES) */
+.pipe.type-tree {
+    background: linear-gradient(to right, #004d00, #00b33c, #004d00);
+    border: 3px solid #00ff66;
+    box-shadow: 0 0 12px rgba(0, 255, 102, 0.5);
+}
+
+.pipe.type-snake {
+    background: linear-gradient(to right, #1a3300, #4d9900, #1a3300);
+    border: 3px solid #80ff00;
+    box-shadow: 0 0 12px rgba(128, 255, 0, 0.6);
+}
+
+.pipe.type-star {
+    background: linear-gradient(to right, #4d3900, #cc9900, #4d3900);
+    border: 3px solid #ffcc00;
+    box-shadow: 0 0 12px rgba(255, 204, 0, 0.7);
+}
+
+.pipe.type-fire {
+    background: linear-gradient(to right, #4d0000, #cc2900, #4d0000);
+    border: 3px solid #ff4d00;
+    box-shadow: 0 0 15px rgba(255, 77, 0, 0.8);
+}
+
+.pipe.type-bone {
+    background: linear-gradient(to right, #262633, #666680, #262633);
+    border: 3px solid #00ffff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.7);
+}
+
+.pipe-icon {
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
+}
+
+/* SCORES AND UI OVERLAYS */
 #score, #high-score {
     position: absolute;
     color: #fff;
