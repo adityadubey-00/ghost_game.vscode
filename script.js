@@ -8,8 +8,8 @@ const gameOverScreen = document.getElementById('game-over-screen');
 const finalScore = document.getElementById('final-score');
 const bestScoreDisplay = document.getElementById('best-score-display');
 
-let ghostY = 250;
-let gravity = 0.30; 
+let ghostY = 300;
+let gravity = 0.32; 
 let velocity = 0;
 let isGameOver = true;
 let score = 0;
@@ -20,9 +20,9 @@ let gameInterval;
 let treeTimeout;
 
 // DEFAULT CONFIG (CHILL MODE)
-let currentSpeed = 1.8;
-let currentGap = 160; 
-let spawnDelay = 2500;
+let currentSpeed = 2.0;
+let currentGap = 180; 
+let spawnDelay = 2400;
 
 // Sound Effects
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -62,9 +62,8 @@ function selectSkin(skinName, btn) {
     document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    // Remove old skin classes
+    // Remove old skin classes & apply selected one
     ghost.className = '';
-    // Apply selected skin
     ghost.classList.add('skin-' + skinName);
 }
 
@@ -76,23 +75,23 @@ function selectDiff(btn) {
     currentSpeed = parseFloat(btn.dataset.speed);
     
     if (currentSpeed === 1.8) {
-        currentGap = 160;
-        spawnDelay = 2500;
+        currentGap = 180;
+        spawnDelay = 2400;
     } else if (currentSpeed === 2.5) {
-        currentGap = 140;
-        spawnDelay = 2100;
+        currentGap = 160;
+        spawnDelay = 2000;
     } else if (currentSpeed === 3.2) {
-        currentGap = 130;
-        spawnDelay = 1800;
+        currentGap = 145;
+        spawnDelay = 1700;
     } else if (currentSpeed === 3.8) {
-        currentGap = 120;
-        spawnDelay = 1500;
+        currentGap = 130;
+        spawnDelay = 1400;
     }
 }
 
 function jump() {
     if (!isGameOver) {
-        velocity = -5.8;
+        velocity = -6.2;
         playSound('jump');
     }
 }
@@ -107,7 +106,7 @@ board.addEventListener('mousedown', (e) => {
 function startGame() {
     document.querySelectorAll('.tree').forEach(tree => tree.remove());
     
-    ghostY = 250;
+    ghostY = 300;
     velocity = 0;
     score = 0;
     isGameOver = false;
@@ -129,7 +128,8 @@ function updateGame() {
     ghostY += velocity;
     ghost.style.top = ghostY + 'px';
 
-    if (ghostY > 590 || ghostY < 0) {
+    // Adjusted for 800px Board Height
+    if (ghostY > 740 || ghostY < 0) {
         endGame();
     }
 
@@ -143,7 +143,7 @@ function updateGame() {
             endGame();
         }
 
-        if (tree.dataset.passed !== 'true' && treeLeft < 30) {
+        if (tree.dataset.passed !== 'true' && treeLeft < 40) {
             if (tree.classList.contains('bottom-tree')) {
                 score++;
                 scoreDisplay.innerText = 'Score: ' + score;
@@ -151,7 +151,7 @@ function updateGame() {
             tree.dataset.passed = 'true';
         }
 
-        if (treeLeft < -70) {
+        if (treeLeft < -80) {
             tree.remove();
         }
     });
@@ -160,20 +160,20 @@ function updateGame() {
 function spawnTree() {
     if (isGameOver) return;
 
-    let randomHeight = Math.floor(Math.random() * 140) + 80;
+    let randomHeight = Math.floor(Math.random() * 200) + 100;
 
     const topTree = document.createElement('div');
     topTree.classList.add('tree', 'top-tree');
-    topTree.style.left = '360px';
+    topTree.style.left = '550px';
     topTree.style.top = '0px';
     topTree.style.height = randomHeight + 'px';
     board.appendChild(topTree);
 
     const bottomTree = document.createElement('div');
     bottomTree.classList.add('tree', 'bottom-tree');
-    bottomTree.style.left = '360px';
+    bottomTree.style.left = '550px';
     bottomTree.style.bottom = '0px';
-    bottomTree.style.height = (640 - randomHeight - currentGap) + 'px';
+    bottomTree.style.height = (800 - randomHeight - currentGap) + 'px';
     board.appendChild(bottomTree);
 
     treeTimeout = setTimeout(spawnTree, spawnDelay);
