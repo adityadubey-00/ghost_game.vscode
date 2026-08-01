@@ -1,56 +1,170 @@
-/* BASE PIPE / OBSTACLE STYLING */
-.pipe {
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+}
+
+body {
+    background-color: #0d0d1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-board {
+    width: 500px;
+    height: 700px;
+    background: linear-gradient(to bottom, #110022, #220033, #330044);
+    position: relative;
+    overflow: hidden;
+    border: 6px solid #bf00ff;
+    box-shadow: 0 0 35px rgba(191, 0, 255, 0.8);
+    border-radius: 16px;
+}
+
+/* PLAYER GHOST */
+#ghost {
+    width: 45px;
+    height: 45px;
     position: absolute;
-    width: 70px;
+    left: 80px;
+    top: 280px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+
+#ghost.skin-ghost {
+    background: linear-gradient(135deg, #ff007f, #7928ca);
+    border-radius: 50% 50% 25% 25%;
+    box-shadow: 0 0 15px #ff007f;
+}
+#ghost.skin-ghost::before, #ghost.skin-ghost::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 7px;
+    height: 9px;
+    background-color: #00ffff;
+    border-radius: 50%;
+}
+#ghost.skin-ghost::before { left: 10px; }
+#ghost.skin-ghost::after { right: 10px; }
+
+#ghost.skin-star::before { content: '⭐'; }
+#ghost.skin-snake::before { content: '🐍'; }
+
+/* PURE EMOJI/OBJECT OBSTACLES (NO PIPES) */
+.obstacle {
+    position: absolute;
+    width: 65px;
     z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+}
+
+/* UI OVERLAYS */
+#score, #high-score {
+    position: absolute;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 15;
+    text-shadow: 0 0 5px #000;
+}
+#score { top: 15px; left: 15px; }
+#high-score { top: 15px; right: 15px; color: #ffcc00; }
+
+.overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(10, 0, 20, 0.9);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 26px;
-    overflow: hidden;
+    z-index: 30;
+    color: white;
+    text-align: center;
+    padding: 20px;
 }
 
-/* 5 RANDOM OBSTACLE TYPES */
-/* 1. Standard Green Pipe / Tree (🌲) */
-.pipe.type-pipe {
-    background: linear-gradient(to right, #004d00, #00b33c, #004d00);
-    border: 3px solid #00ff66;
-    box-shadow: 0 0 10px rgba(0,255,102,0.5);
+.overlay h1 {
+    font-size: 36px;
+    color: #cc33ff;
+    text-shadow: 0 0 10px #cc33ff;
+    margin-bottom: 10px;
 }
 
-/* 2. Snake Pillar (🐍) */
-.pipe.type-snake {
-    background: linear-gradient(to right, #1a3300, #4d9900, #1a3300);
-    border: 3px solid #80ff00;
-    box-shadow: 0 0 12px rgba(128,255,0,0.6);
+.overlay h3 {
+    font-size: 15px;
+    color: #ffcc00;
+    margin-bottom: 10px;
 }
 
-/* 3. Star Pillar (⭐) */
-.pipe.type-star {
-    background: linear-gradient(to right, #4d3900, #cc9900, #4d3900);
-    border: 3px solid #ffcc00;
-    box-shadow: 0 0 12px rgba(255,204,0,0.7);
+.overlay p { font-size: 16px; color: #ccc; margin-bottom: 20px; }
+
+.skin-container { display: flex; gap: 10px; margin-bottom: 20px; }
+.skin-btn {
+    padding: 10px 16px;
+    font-weight: bold;
+    background: #1a0026;
+    color: #bbb;
+    border: 2px solid #660099;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.skin-btn.active {
+    background: #9900ff;
+    color: #fff;
+    border-color: #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
 }
 
-/* 4. Fire Lava Pillar (🔥) */
-.pipe.type-fire {
-    background: linear-gradient(to right, #4d0000, #cc2900, #4d0000);
-    border: 3px solid #ff4d00;
-    box-shadow: 0 0 15px rgba(255,77,0,0.8);
+.diff-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 25px;
+    width: 80%;
+}
+.diff-btn {
+    padding: 10px;
+    font-weight: bold;
+    background: #220033;
+    color: #aaa;
+    border: 2px solid #550088;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.diff-btn.active {
+    background: #8800cc;
+    color: #fff;
+    border-color: #00ff66;
+    box-shadow: 0 0 8px #00ff66;
 }
 
-/* 5. Bone / Skull Pillar (💀) */
-.pipe.type-bone {
-    background: linear-gradient(to right, #262633, #666680, #262633);
-    border: 3px solid #00ffff;
-    box-shadow: 0 0 12px rgba(0,255,255,0.7);
+.btn {
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #8800cc, #bb00ff);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(187, 0, 255, 0.6);
 }
-
-.pipe.top-pipe { border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
-.pipe.bottom-pipe { border-top-left-radius: 10px; border-top-right-radius: 10px; }
-
-.pipe-icon {
-    margin: 4px 0;
-    filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
-}
+.btn:active { transform: scale(0.95); }
+.btn-group { display: flex; gap: 12px; }
+.menu-btn-style { background: linear-gradient(45deg, #444, #666); box-shadow: none; }
