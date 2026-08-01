@@ -85,25 +85,86 @@ body {
     filter: drop-shadow(0 0 12px #00ff66);
 }
 
-/* Trees / Obstacles */
+/* --- 5 RANDOM OBSTACLE TYPES --- */
 .tree {
     position: absolute;
     width: 75px;
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* 1. Green Spooky Pipe */
+.tree.type-tree {
     background: linear-gradient(to right, #004d00, #008000, #003300);
     border: 3px solid #00ff66;
     box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
-    z-index: 2;
 }
+.tree.type-tree.top-tree { border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+.tree.type-tree.bottom-tree { border-top-left-radius: 12px; border-top-right-radius: 12px; }
 
-.top-tree {
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+/* 2. Snake Pillar */
+.tree.type-snake {
+    background: linear-gradient(to right, #114411, #22aa22, #0d330d);
+    border: 3px solid #33ff33;
+    box-shadow: 0 0 15px rgba(51, 255, 51, 0.6);
 }
+.tree.type-snake::after {
+    content: '🐍 🐍 🐍';
+    font-size: 24px;
+    writing-mode: vertical-rl;
+    letter-spacing: 12px;
+}
+.tree.type-snake.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+.tree.type-snake.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
 
-.bottom-tree {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+/* 3. Star Crystal Pillar */
+.tree.type-star {
+    background: linear-gradient(to right, #665500, #ffcc00, #997700);
+    border: 3px solid #ffee55;
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.7);
 }
+.tree.type-star::after {
+    content: '⭐ ⭐ ⭐';
+    font-size: 24px;
+    writing-mode: vertical-rl;
+    letter-spacing: 12px;
+}
+.tree.type-star.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+.tree.type-star.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
+
+/* 4. Fire / Lava Pillar */
+.tree.type-fire {
+    background: linear-gradient(to right, #660000, #ff3300, #990000);
+    border: 3px solid #ff6600;
+    box-shadow: 0 0 20px rgba(255, 51, 0, 0.8);
+}
+.tree.type-fire::after {
+    content: '🔥 🔥 🔥';
+    font-size: 24px;
+    writing-mode: vertical-rl;
+    letter-spacing: 12px;
+}
+.tree.type-fire.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+.tree.type-fire.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
+
+/* 5. Skull / Bone Pillar */
+.tree.type-bone {
+    background: linear-gradient(to right, #333344, #8888aa, #222233);
+    border: 3px solid #00ffff;
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.7);
+}
+.tree.type-bone::after {
+    content: '💀 💀 💀';
+    font-size: 24px;
+    writing-mode: vertical-rl;
+    letter-spacing: 12px;
+}
+.tree.type-bone.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
+.tree.type-bone.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
 
 /* Scores */
 #score, #high-score {
