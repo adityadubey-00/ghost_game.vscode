@@ -19,7 +19,7 @@ highScoreDisplay.innerText = "Best: " + highScore;
 let gameInterval;
 let treeTimeout;
 
-// DEFAULT: Chill Mode (160px Gap)
+// DEFAULT CONFIG (CHILL MODE)
 let currentSpeed = 1.8;
 let currentGap = 160; 
 let spawnDelay = 2500;
@@ -57,24 +57,35 @@ function enterGame() {
     menuScreen.style.display = 'flex';
 }
 
+// SKIN SELECTOR FUNCTION
+function selectSkin(skinName, btn) {
+    document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Remove old skin classes
+    ghost.className = '';
+    // Apply selected skin
+    ghost.classList.add('skin-' + skinName);
+}
+
+// DIFFICULTY SELECTOR
 function selectDiff(btn) {
     document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     
     currentSpeed = parseFloat(btn.dataset.speed);
     
-    // 4 Difficulty Levels Setup
     if (currentSpeed === 1.8) {
-        currentGap = 160; // Chill (160px)
+        currentGap = 160;
         spawnDelay = 2500;
     } else if (currentSpeed === 2.5) {
-        currentGap = 140; // Spooky (140px)
+        currentGap = 140;
         spawnDelay = 2100;
     } else if (currentSpeed === 3.2) {
-        currentGap = 130; // Hard (130px)
+        currentGap = 130;
         spawnDelay = 1800;
     } else if (currentSpeed === 3.8) {
-        currentGap = 120; // PRO MODE (120px)
+        currentGap = 120;
         spawnDelay = 1500;
     }
 }
