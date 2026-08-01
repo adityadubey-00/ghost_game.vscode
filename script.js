@@ -17,12 +17,13 @@ let highScore = localStorage.getItem('ghostHighScore') || 0;
 highScoreDisplay.innerText = "Best: " + highScore;
 
 let gameInterval;
-let obstacleTimeout;
+let pipeTimeout;
 
 let currentSpeed = 2.5;
 let currentGap = 180;
 let spawnDelay = 1800;
 
+// Sound Effects
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -85,7 +86,7 @@ board.addEventListener('mousedown', (e) => {
 });
 
 function startGame() {
-    document.querySelectorAll('.obstacle').forEach(p => p.remove());
+    document.querySelectorAll('.pipe').forEach(p => p.remove());
     ghostY = 280;
     velocity = 0;
     score = 0;
@@ -96,11 +97,11 @@ function startGame() {
     menuScreen.style.display = 'none';
     gameOverScreen.style.display = 'none';
 
-    clearTimeout(obstacleTimeout);
+    clearTimeout(pipeTimeout);
     clearInterval(gameInterval);
 
     gameInterval = setInterval(updateGame, 20);
-    spawnObstacle();
+    spawnPipe();
 }
 
 function updateGame() {
@@ -112,64 +113,87 @@ function updateGame() {
         endGame();
     }
 
-    const obstacles = document.querySelectorAll('.obstacle');
-    obstacles.forEach(obs => {
-        let obsLeft = parseFloat(obs.style.left);
-        obsLeft -= currentSpeed;
-        obs.style.left = obsLeft + 'px';
+    const pipes = document.querySelectorAll('.pipe');
+    pipes.forEach(pipe => {
+        let pipeLeft = parseFloat(pipe.style.left);
+        pipeLeft -= currentSpeed;
+        pipe.style.left = pipeLeft + 'px';
 
-        if (isColliding(ghost, obs)) {
+        if (isColliding(ghost, pipe)) {
             endGame();
         }
 
-        if (obs.dataset.passed !== 'true' && obsLeft < 40) {
-            if (obs.classList.contains('bottom-obs')) {
+        if (pipe.dataset.passed !== 'true' && pipeLeft < 40) {
+            if (pipe.classList.contains('bottom-pipe')) {
                 score++;
                 scoreDisplay.innerText = 'Score: ' + score;
             }
-            obs.dataset.passed = 'true';
+            pipe.dataset.passed = 'true';
         }
 
-        if (obsLeft < -80) {
-            obs.remove();
+        if (pipeLeft < -80) {
+            pipe.remove();
         }
     });
 }
 
-// 5 RANDOM EMOJIS (No Pipes)
-const itemsList = ['🐍', '⭐', '🌲', '🔥', '💀'];
+// 5 OBSTACLE TYPES WITH THEIR ICONS
+const obstacleTypes = [
+    { class: 'type-tree', icon: '🌲' },
+    { class: 'type-snake', icon: '🐍' },
+    { class: 'type-star', icon: '⭐' },
+    { class: 'type-fire', icon: '🔥' },
+    { class: 'type-bone', icon: '💀' }
+];
 
-function spawnObstacle() {
+function spawnPipe() {
     if (isGameOver) return;
 
     let topHeight = Math.floor(Math.random() * 220) + 80;
+    let bottomHeight = 700 - topHeight - currentGap;
 
-    let randomTopItem = itemsList[Math.floor(Math.random() * itemsList.length)];
-    let randomBottomItem = itemsList[Math.floor(Math.random() * itemsList.length)];
+    // Pick 1 random theme for both pillars
+    let randomObstacle = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
 
-    // Top Item
-    const topObs = document.createElement('div');
-    topObs.classList.add('obstacle', 'top-obs');
-    topObs.style.left = '500px';
-    topObs.style.top = topHeight + 'px';
-    topObs.innerText = randomTopItem;
-    board.appendChild(topObs);
+    // Top Pillar
+    const topPipe = document.createElement('div');
+    topPipe.classList.add('pipe', 'top-pipe', randomObstacle.class);
+    topPipe.style.left = '500px';
+    topPipe.style.top = '0px';
+    topPipe.style.height = topHeight + 'px';
 
-    // Bottom Item
-    const bottomObs = document.createElement('div');
-    bottomObs.classList.add('obstacle', 'bottom-obs');
-    bottomObs.style.left = '500px';
-    bottomObs.style.top = (topHeight + currentGap) + 'px';
-    bottomObs.innerText = randomBottomItem;
-    board.appendChild(bottomObs);
+    let countTop = Math.max(1, Math.floor(topHeight / 45));
+    for(let i = 0; i < countTop; i++) {
+        let span = document.createElement('span');
+        span.className = 'pipe-icon';
+        span.innerText = randomObstacle.icon;
+        topPipe.appendChild(span);
+    }
+    board.appendChild(topPipe);
 
-    obstacleTimeout = setTimeout(spawnObstacle, spawnDelay);
+    // Bottom Pillar
+    const bottomPipe = document.createElement('div');
+    bottomPipe.classList.add('pipe', 'bottom-pipe', randomObstacle.class);
+    bottomPipe.style.left = '500px';
+    bottomPipe.style.bottom = '0px';
+    bottomPipe.style.height = bottomHeight + 'px';
+
+    let countBottom = Math.max(1, Math.floor(bottomHeight / 45));
+    for(let i = 0; i < countBottom; i++) {
+        let span = document.createElement('span');
+        span.className = 'pipe-icon';
+        span.innerText = randomObstacle.icon;
+        bottomPipe.appendChild(span);
+    }
+    board.appendChild(bottomPipe);
+
+    pipeTimeout = setTimeout(spawnPipe, spawnDelay);
 }
 
 function isColliding(a, b) {
     let aRect = a.getBoundingClientRect();
     let bRect = b.getBoundingClientRect();
-    let padding = 8;
+    let padding = 6;
 
     return !(
         aRect.top + padding > bRect.bottom ||
@@ -185,7 +209,7 @@ function endGame() {
     playSound('hit');
 
     clearInterval(gameInterval);
-    clearTimeout(obstacleTimeout);
+    clearTimeout(pipeTimeout);
 
     if (score > highScore) {
         highScore = score;
