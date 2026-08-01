@@ -26,22 +26,30 @@ body {
     border-radius: 12px;
 }
 
-/* NEW NEW LOOK FOR GHOST (Neon Glowing Purple Ghost) */
+/* Base Character Dimensions */
 #ghost {
     width: 42px;
     height: 42px;
-    background: linear-gradient(135deg, #ff007f, #7928ca);
-    border-radius: 50% 50% 20% 20%;
     position: absolute;
     left: 60px;
     top: 250px;
-    box-shadow: 0 0 20px #ff007f, 0 0 35px #7928ca;
     z-index: 5;
     transition: transform 0.1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
 }
 
-/* Glowing Red Eyes */
-#ghost::before, #ghost::after {
+/* --- CHARACTER SKINS --- */
+
+/* 1. Ghost Skin */
+#ghost.skin-ghost {
+    background: linear-gradient(135deg, #ff007f, #7928ca);
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 0 0 20px #ff007f, 0 0 35px #7928ca;
+}
+#ghost.skin-ghost::before, #ghost.skin-ghost::after {
     content: '';
     position: absolute;
     top: 12px;
@@ -51,8 +59,30 @@ body {
     border-radius: 50%;
     box-shadow: 0 0 5px #00ffff;
 }
-#ghost::before { left: 9px; }
-#ghost::after { right: 9px; }
+#ghost.skin-ghost::before { left: 9px; }
+#ghost.skin-ghost::after { right: 9px; }
+
+/* 2. Star Skin */
+#ghost.skin-star {
+    background: transparent;
+    box-shadow: none;
+}
+#ghost.skin-star::before {
+    content: '⭐';
+    font-size: 38px;
+    filter: drop-shadow(0 0 10px #ffcc00);
+}
+
+/* 3. Snake Skin */
+#ghost.skin-snake {
+    background: transparent;
+    box-shadow: none;
+}
+#ghost.skin-snake::before {
+    content: '🐍';
+    font-size: 38px;
+    filter: drop-shadow(0 0 10px #00ff66);
+}
 
 /* Trees / Obstacles */
 .tree {
@@ -93,7 +123,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 0, 20, 0.85);
+    background: rgba(10, 0, 20, 0.88);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -101,52 +131,66 @@ body {
     z-index: 20;
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .overlay h1 {
     font-size: 32px;
     color: #cc33ff;
     text-shadow: 0 0 10px #cc33ff;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.overlay h3 {
+    font-size: 14px;
+    color: #ffcc00;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
 }
 
 .overlay p {
-    font-size: 16px;
+    font-size: 15px;
     color: #ccc;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-/* Buttons */
-.btn {
-    padding: 12px 28px;
-    font-size: 18px;
+/* Character Skin Selection UI */
+.skin-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.skin-btn {
+    padding: 8px 12px;
+    font-size: 13px;
     font-weight: bold;
-    color: #fff;
-    background: linear-gradient(45deg, #8800cc, #bb00ff);
-    border: none;
-    border-radius: 25px;
+    background: #1a0026;
+    color: #bbb;
+    border: 2px solid #660099;
+    border-radius: 20px;
     cursor: pointer;
-    box-shadow: 0 0 15px rgba(187, 0, 255, 0.6);
-    transition: transform 0.1s, background 0.2s;
-    margin: 5px;
 }
 
-.btn:active {
-    transform: scale(0.95);
+.skin-btn.active {
+    background: #9900ff;
+    color: #fff;
+    border-color: #ffcc00;
+    box-shadow: 0 0 10px #ffcc00;
 }
 
+/* Difficulty UI */
 .diff-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 25px;
+    gap: 8px;
+    margin-bottom: 20px;
     width: 85%;
 }
 
 .diff-btn {
-    padding: 10px 5px;
-    font-size: 12px;
+    padding: 8px 5px;
+    font-size: 11px;
     font-weight: bold;
     background: #220033;
     color: #aaa;
@@ -160,6 +204,24 @@ body {
     color: #fff;
     border-color: #00ff66;
     box-shadow: 0 0 8px #00ff66;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #8800cc, #bb00ff);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(187, 0, 255, 0.6);
+    transition: transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.95);
 }
 
 .btn-group {
