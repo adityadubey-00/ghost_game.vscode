@@ -23,7 +23,6 @@ let currentSpeed = 2.5;
 let currentGap = 180;
 let spawnDelay = 1800;
 
-// Sound Effects
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playSound(type) {
@@ -137,28 +136,26 @@ function updateGame() {
     });
 }
 
-// 5 OBJECTS LIST
+// 5 RANDOM EMOJIS (No Pipes)
 const itemsList = ['🐍', '⭐', '🌲', '🔥', '💀'];
 
 function spawnObstacle() {
     if (isGameOver) return;
 
     let topHeight = Math.floor(Math.random() * 220) + 80;
-    let bottomHeight = 700 - topHeight - currentGap;
 
-    // Select random item for top and bottom
     let randomTopItem = itemsList[Math.floor(Math.random() * itemsList.length)];
     let randomBottomItem = itemsList[Math.floor(Math.random() * itemsList.length)];
 
-    // Top Floating Object
+    // Top Item
     const topObs = document.createElement('div');
     topObs.classList.add('obstacle', 'top-obs');
     topObs.style.left = '500px';
-    topObs.style.top = (topHeight - 30) + 'px';
+    topObs.style.top = topHeight + 'px';
     topObs.innerText = randomTopItem;
     board.appendChild(topObs);
 
-    // Bottom Floating Object
+    // Bottom Item
     const bottomObs = document.createElement('div');
     bottomObs.classList.add('obstacle', 'bottom-obs');
     bottomObs.style.left = '500px';
@@ -172,7 +169,7 @@ function spawnObstacle() {
 function isColliding(a, b) {
     let aRect = a.getBoundingClientRect();
     let bRect = b.getBoundingClientRect();
-    let padding = 10;
+    let padding = 8;
 
     return !(
         aRect.top + padding > bRect.bottom ||
