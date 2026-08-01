@@ -1,298 +1,56 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
-}
-
-body {
-    background-color: #0d0d1a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-}
-
-/* BIGGER GAME BOARD & BOLD PURPLE BOUNDARY */
-#game-board {
-    width: 550px;
-    height: 800px;
-    max-height: 94vh;
-    background: linear-gradient(to bottom, #110022, #220033, #330044);
-    position: relative;
-    overflow: hidden;
-    border: 8px solid #bf00ff;
-    box-shadow: 0 0 45px rgba(191, 0, 255, 0.8), 0 0 15px rgba(255, 0, 255, 0.4);
-    border-radius: 20px;
-}
-
-/* Base Character Dimensions */
-#ghost {
-    width: 50px;
-    height: 50px;
+/* BASE PIPE / OBSTACLE STYLING */
+.pipe {
     position: absolute;
-    left: 80px;
-    top: 300px;
+    width: 70px;
     z-index: 5;
-    transition: transform 0.1s;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-/* --- CHARACTER SKINS --- */
-
-/* 1. Ghost Skin */
-#ghost.skin-ghost {
-    background: linear-gradient(135deg, #ff007f, #7928ca);
-    border-radius: 50% 50% 20% 20%;
-    box-shadow: 0 0 20px #ff007f, 0 0 35px #7928ca;
-}
-#ghost.skin-ghost::before, #ghost.skin-ghost::after {
-    content: '';
-    position: absolute;
-    top: 14px;
-    width: 8px;
-    height: 10px;
-    background-color: #00ffff;
-    border-radius: 50%;
-    box-shadow: 0 0 5px #00ffff;
-}
-#ghost.skin-ghost::before { left: 11px; }
-#ghost.skin-ghost::after { right: 11px; }
-
-/* 2. Star Skin */
-#ghost.skin-star {
-    background: transparent;
-    box-shadow: none;
-}
-#ghost.skin-star::before {
-    content: '⭐';
-    font-size: 46px;
-    filter: drop-shadow(0 0 12px #ffcc00);
-}
-
-/* 3. Snake Skin */
-#ghost.skin-snake {
-    background: transparent;
-    box-shadow: none;
-}
-#ghost.skin-snake::before {
-    content: '🐍';
-    font-size: 46px;
-    filter: drop-shadow(0 0 12px #00ff66);
-}
-
-/* --- 5 RANDOM OBSTACLE TYPES --- */
-.tree {
-    position: absolute;
-    width: 75px;
-    z-index: 2;
+    font-size: 26px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
 }
 
-/* 1. Green Spooky Pipe */
-.tree.type-tree {
-    background: linear-gradient(to right, #004d00, #008000, #003300);
+/* 5 RANDOM OBSTACLE TYPES */
+/* 1. Standard Green Pipe / Tree (🌲) */
+.pipe.type-pipe {
+    background: linear-gradient(to right, #004d00, #00b33c, #004d00);
     border: 3px solid #00ff66;
-    box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+    box-shadow: 0 0 10px rgba(0,255,102,0.5);
 }
-.tree.type-tree.top-tree { border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
-.tree.type-tree.bottom-tree { border-top-left-radius: 12px; border-top-right-radius: 12px; }
 
-/* 2. Snake Pillar */
-.tree.type-snake {
-    background: linear-gradient(to right, #114411, #22aa22, #0d330d);
-    border: 3px solid #33ff33;
-    box-shadow: 0 0 15px rgba(51, 255, 51, 0.6);
+/* 2. Snake Pillar (🐍) */
+.pipe.type-snake {
+    background: linear-gradient(to right, #1a3300, #4d9900, #1a3300);
+    border: 3px solid #80ff00;
+    box-shadow: 0 0 12px rgba(128,255,0,0.6);
 }
-.tree.type-snake::after {
-    content: '🐍 🐍 🐍';
-    font-size: 24px;
-    writing-mode: vertical-rl;
-    letter-spacing: 12px;
-}
-.tree.type-snake.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
-.tree.type-snake.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
 
-/* 3. Star Crystal Pillar */
-.tree.type-star {
-    background: linear-gradient(to right, #665500, #ffcc00, #997700);
-    border: 3px solid #ffee55;
-    box-shadow: 0 0 18px rgba(255, 204, 0, 0.7);
+/* 3. Star Pillar (⭐) */
+.pipe.type-star {
+    background: linear-gradient(to right, #4d3900, #cc9900, #4d3900);
+    border: 3px solid #ffcc00;
+    box-shadow: 0 0 12px rgba(255,204,0,0.7);
 }
-.tree.type-star::after {
-    content: '⭐ ⭐ ⭐';
-    font-size: 24px;
-    writing-mode: vertical-rl;
-    letter-spacing: 12px;
-}
-.tree.type-star.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
-.tree.type-star.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
 
-/* 4. Fire / Lava Pillar */
-.tree.type-fire {
-    background: linear-gradient(to right, #660000, #ff3300, #990000);
-    border: 3px solid #ff6600;
-    box-shadow: 0 0 20px rgba(255, 51, 0, 0.8);
+/* 4. Fire Lava Pillar (🔥) */
+.pipe.type-fire {
+    background: linear-gradient(to right, #4d0000, #cc2900, #4d0000);
+    border: 3px solid #ff4d00;
+    box-shadow: 0 0 15px rgba(255,77,0,0.8);
 }
-.tree.type-fire::after {
-    content: '🔥 🔥 🔥';
-    font-size: 24px;
-    writing-mode: vertical-rl;
-    letter-spacing: 12px;
-}
-.tree.type-fire.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
-.tree.type-fire.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
 
-/* 5. Skull / Bone Pillar */
-.tree.type-bone {
-    background: linear-gradient(to right, #333344, #8888aa, #222233);
+/* 5. Bone / Skull Pillar (💀) */
+.pipe.type-bone {
+    background: linear-gradient(to right, #262633, #666680, #262633);
     border: 3px solid #00ffff;
-    box-shadow: 0 0 18px rgba(0, 255, 255, 0.7);
-}
-.tree.type-bone::after {
-    content: '💀 💀 💀';
-    font-size: 24px;
-    writing-mode: vertical-rl;
-    letter-spacing: 12px;
-}
-.tree.type-bone.top-tree { border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; }
-.tree.type-bone.bottom-tree { border-top-left-radius: 14px; border-top-right-radius: 14px; }
-
-/* Scores */
-#score, #high-score {
-    position: absolute;
-    color: #fff;
-    font-size: 22px;
-    font-weight: bold;
-    z-index: 10;
-    text-shadow: 0 0 6px #000;
-}
-#score { top: 20px; left: 20px; }
-#high-score { top: 20px; right: 20px; color: #ffcc00; }
-
-/* Overlays / Screens */
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 0, 20, 0.88);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-    color: white;
-    text-align: center;
-    padding: 20px;
+    box-shadow: 0 0 12px rgba(0,255,255,0.7);
 }
 
-.overlay h1 {
-    font-size: 40px;
-    color: #cc33ff;
-    text-shadow: 0 0 12px #cc33ff;
-    margin-bottom: 10px;
-}
+.pipe.top-pipe { border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+.pipe.bottom-pipe { border-top-left-radius: 10px; border-top-right-radius: 10px; }
 
-.overlay h3 {
-    font-size: 16px;
-    color: #ffcc00;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-}
-
-.overlay p {
-    font-size: 18px;
-    color: #ccc;
-    margin-bottom: 25px;
-}
-
-/* Character Skin Selection UI */
-.skin-container {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-.skin-btn {
-    padding: 12px 20px;
-    font-size: 15px;
-    font-weight: bold;
-    background: #1a0026;
-    color: #bbb;
-    border: 2px solid #660099;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.skin-btn.active {
-    background: #9900ff;
-    color: #fff;
-    border-color: #ffcc00;
-    box-shadow: 0 0 12px #ffcc00;
-}
-
-/* Difficulty UI */
-.diff-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 30px;
-    width: 85%;
-}
-
-.diff-btn {
-    padding: 12px 8px;
-    font-size: 13px;
-    font-weight: bold;
-    background: #220033;
-    color: #aaa;
-    border: 2px solid #550088;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.diff-btn.active {
-    background: #8800cc;
-    color: #fff;
-    border-color: #00ff66;
-    box-shadow: 0 0 10px #00ff66;
-}
-
-/* Buttons */
-.btn {
-    padding: 14px 32px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(45deg, #8800cc, #bb00ff);
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    box-shadow: 0 0 18px rgba(187, 0, 255, 0.6);
-    transition: transform 0.1s;
-}
-
-.btn:active {
-    transform: scale(0.95);
-}
-
-.btn-group {
-    display: flex;
-    gap: 15px;
-}
-
-.menu-btn-style {
-    background: linear-gradient(45deg, #444, #666);
-    box-shadow: none;
+.pipe-icon {
+    margin: 4px 0;
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
 }
