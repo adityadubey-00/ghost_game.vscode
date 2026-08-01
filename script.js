@@ -20,7 +20,7 @@ let gameInterval;
 let treeTimeout;
 
 // DEFAULT CONFIG (CHILL MODE)
-let currentSpeed = 2.0;
+let currentSpeed = 1.8;
 let currentGap = 180; 
 let spawnDelay = 2400;
 
@@ -128,7 +128,6 @@ function updateGame() {
     ghostY += velocity;
     ghost.style.top = ghostY + 'px';
 
-    // Adjusted for 800px Board Height
     if (ghostY > 740 || ghostY < 0) {
         endGame();
     }
@@ -157,20 +156,26 @@ function updateGame() {
     });
 }
 
+// 5 OBSTACLE TYPES (Tree/Pipe, Snake, Star, Fire, Bone)
+const obstacleTypes = ['type-tree', 'type-snake', 'type-star', 'type-fire', 'type-bone'];
+
 function spawnTree() {
     if (isGameOver) return;
 
     let randomHeight = Math.floor(Math.random() * 200) + 100;
+    
+    // Pick a random obstacle type among 5 choices
+    let randomType = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
 
     const topTree = document.createElement('div');
-    topTree.classList.add('tree', 'top-tree');
+    topTree.classList.add('tree', 'top-tree', randomType);
     topTree.style.left = '550px';
     topTree.style.top = '0px';
     topTree.style.height = randomHeight + 'px';
     board.appendChild(topTree);
 
     const bottomTree = document.createElement('div');
-    bottomTree.classList.add('tree', 'bottom-tree');
+    bottomTree.classList.add('tree', 'bottom-tree', randomType);
     bottomTree.style.left = '550px';
     bottomTree.style.bottom = '0px';
     bottomTree.style.height = (800 - randomHeight - currentGap) + 'px';
