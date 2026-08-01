@@ -3,30 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghost Nightmare - Flappy Run</title>
+    <title>Ghost Run</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="game-board">
-        <!-- Live Score Display -->
         <div id="score">Score: 0</div>
         <div id="high-score">Best: 0</div>
 
-        <!-- Player Character -->
         <div id="ghost" class="skin-ghost"></div>
 
-        <!-- 1. Welcome Screen -->
+        <!-- Start Screen -->
         <div id="welcome-screen" class="overlay">
             <h1>👻 GHOST RUN</h1>
             <p>Spooky Flappy Adventure</p>
             <button class="btn" onclick="enterGame()">ENTER GAME</button>
         </div>
 
-        <!-- 2. Menu / Settings Screen -->
+        <!-- Menu Screen -->
         <div id="menu-screen" class="overlay" style="display: none;">
-            
-            <!-- Skin Selector -->
             <h3>CHOOSE CHARACTER</h3>
             <div class="skin-container">
                 <button class="skin-btn active" onclick="selectSkin('ghost', this)">👻 Ghost</button>
@@ -34,21 +30,20 @@
                 <button class="skin-btn" onclick="selectSkin('snake', this)">🐍 Snake</button>
             </div>
 
-            <!-- Difficulty Selector -->
             <h3>SELECT MODE</h3>
             <div class="diff-container">
-                <button class="diff-btn active" data-speed="1.8" onclick="selectDiff(this)">CHILL (160px)</button>
-                <button class="diff-btn" data-speed="2.5" onclick="selectDiff(this)">SPOOKY (140px)</button>
-                <button class="diff-btn" data-speed="3.2" onclick="selectDiff(this)">HARD (130px)</button>
-                <button class="diff-btn" data-speed="3.8" onclick="selectDiff(this)">PRO (120px)</button>
+                <button class="diff-btn active" data-speed="2.2" data-gap="180" onclick="selectDiff(this)">EASY</button>
+                <button class="diff-btn" data-speed="2.8" data-gap="160" onclick="selectDiff(this)">MEDIUM</button>
+                <button class="diff-btn" data-speed="3.4" data-gap="140" onclick="selectDiff(this)">HARD</button>
+                <button class="diff-btn" data-speed="4.0" data-gap="120" onclick="selectDiff(this)">PRO</button>
             </div>
 
-            <button class="btn start-btn" onclick="startGame()">START GAME</button>
+            <button class="btn" onclick="startGame()">START GAME</button>
         </div>
 
-        <!-- 3. Game Over Screen -->
+        <!-- Game Over Screen -->
         <div id="game-over-screen" class="overlay" style="display: none;">
-            <h1 class="game-over-text">GAME OVER</h1>
+            <h1>GAME OVER</h1>
             <p id="final-score">Current Score: 0</p>
             <p id="best-score-display">High Score: 0</p>
             <div class="btn-group">
